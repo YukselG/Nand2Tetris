@@ -1,0 +1,34 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/PC.hdl
+/**
+ * A 16-bit counter.
+ * if      reset(t): out(t+1) = 0
+ * else if load(t):  out(t+1) = in(t)
+ * else if inc(t):   out(t+1) = out(t) + 1
+ * else              out(t+1) = out(t)
+ */
+CHIP PC {
+    IN in[16], reset, load, inc;
+    OUT out[16];
+    
+    PARTS:
+    /* The 3 Mux gates determines what operation to run
+       So, if we run a reset, a load, an inc, or just keep the same value from time t*/
+    
+    // if reset = 1, output is 0 (false), else check the next Mux (load or inc)
+    Mux16(a=muxloadinc, b=false, sel=reset, out=outmux);
+
+    // if load = 1, output is in, else check next Mux (inc or same)
+    Mux16(a=muxincornot, b=in, sel=load, out=muxloadinc);
+
+    // if inc = 1, output is increment of t, else same value as of t
+    Mux16(a=outsame, b=outinc, sel=inc, out=muxincornot);
+    
+    // same out as t, and we register the logic that comes out from the above 3 Mux gates
+    Register(in=outmux, load=true, out=out, out=outsame);
+
+    // increment t
+    Inc16(in=outsame, out=outinc);
+}

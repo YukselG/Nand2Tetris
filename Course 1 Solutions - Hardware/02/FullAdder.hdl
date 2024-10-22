@@ -1,0 +1,55 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/2/FullAdder.hdl
+/**
+ * Computes the sum of three bits.
+ */
+CHIP FullAdder {
+    IN a, b, c;  // 1-bit inputs
+    OUT sum,     // Right bit of a + b + c
+        carry;   // Left bit of a + b + c
+
+    PARTS:
+    /* The following works, but an approach using lesser gates would be better
+    Not(in=a, out=nota);
+    Not(in=b, out=notb);
+    Not(in=c, out=notc);
+
+    And(a=nota, b=c, out=notandc);
+    And(a=notandc, b=notb, out=c1);
+
+    And(a=nota, b=b, out=notaandb);
+    And(a=notaandb, b=notc, out=b1);
+
+    And(a=a, b=notb, out=aandnotb);
+    And(a=aandnotb, b=notc, out=a1);
+
+    And(a=a, b=b, out=aandb);
+    And(a=aandb, b=c, out=out111);
+
+    Or(a=c1, b=b1, out=c1orb1);
+    Or(a=a1, b=out111, out=a1orout111);
+    Or(a=c1orb1, b=a1orout111, out=sum);
+
+    And(a=notaandb, b=c, out=bc11);
+
+    And(a=a, b=c, out=aandc);
+    And(a=aandc, b=notb, out=ac11);
+
+    And(a=aandb, b=notc, out=ab11);
+    And(a=aandb, b=c, out=out111carry);
+
+    Or(a=bc11, b=ac11, out=bc11orac11);
+    Or(a=ab11, b=out111carry, out=ab11orout111carry);
+    Or(a=bc11orac11, b=ab11orout111carry, out=carry);
+    */
+
+    // Much shorter version with just two HalfAdders and an Or
+    HalfAdder(a=a, b=b, sum=absum, carry=abcarry);
+    HalfAdder(a=c, b=absum, sum=sum, carry=abccarry);
+    Or(a=abcarry, b=abccarry, out=carry);
+    
+
+
+}

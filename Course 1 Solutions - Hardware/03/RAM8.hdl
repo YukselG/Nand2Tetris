@@ -1,0 +1,37 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/RAM8.hdl
+/**
+ * Memory of eight 16-bit registers.
+ * If load is asserted, the value of the register selected by
+ * address is set to in; Otherwise, the value does not change.
+ * The value of the selected register is emitted by out.
+ */
+CHIP RAM8 {
+    IN in[16], load, address[3];
+    OUT out[16];
+
+    PARTS:
+    // In the DMux8Way, we determine which output to set to the load value (in value) based on sel's value.
+    // So, if sel = 000, the output pin is 'a=outa', which is going to take the value of 'in=load'.
+    // while the rest of the output pins is going to be 0.
+    // So in the Dmux we determine which address we are going to load in to
+    // and also if the load is true or false.
+    DMux8Way(in=load, sel=address, a=outa, b=outb, c=outc, d=outd, e=oute, f=outf, g=outg, h=outh);
+    // We can then feed the input and the outputs from the Dmux to the registers
+    // So the 'in' input will take the inputs, and the load input will determine which register that will load the input.
+    Register(in=in, load=outa, out=ra);
+    Register(in=in, load=outb, out=rb);
+    Register(in=in, load=outc, out=rc);
+    Register(in=in, load=outd, out=rd);
+    Register(in=in, load=oute, out=re);
+    Register(in=in, load=outf, out=rf);
+    Register(in=in, load=outg, out=rg);
+    Register(in=in, load=outh, out=rh);
+    // The register that has a load value of true will have its out assigned to the feeded input value,
+    // while rest of the registers will hold the same value as before, since their load values were 0.
+    // So with the Mux we can read the desired value by passing in the address to the regsiter.
+    // Since the input values of the Mux matches each of the registers outputs.
+    Mux8Way16(a=ra, b=rb, c=rc, d=rd, e=re, f=rf, g=rg, h=rh, sel=address, out=out);
+}
