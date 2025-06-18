@@ -1,0 +1,57 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/5/Memory.hdl
+/**
+ * The complete address space of the Hack computer's memory,
+ * including RAM and memory-mapped I/O. 
+ * The chip facilitates read and write operations, as follows:
+ *     Read:  out(t) = Memory[address(t)](t)
+ *     Write: if load(t-1) then Memory[address(t-1)](t) = in(t-1)
+ * In words: the chip always outputs the value stored at the memory 
+ * location specified by address. If load=1, the in value is loaded 
+ * into the memory location specified by address. This value becomes 
+ * available through the out output from the next time step onward.
+ * Address space rules:
+ * Only the upper 16K+8K+1 words of the Memory chip are used. 
+ * Access to address>0x6000 is invalid and reads 0. Access to any address
+ * in the range 0x4000-0x5FFF results in accessing the screen memory 
+ * map. Access to address 0x6000 results in accessing the keyboard 
+ * memory map. The behavior in these addresses is described in the Screen
+ * and Keyboard chip specifications given in the lectures and the book.
+ */
+CHIP Memory {
+    IN in[16], load, address[15];
+    OUT out[16];
+
+    PARTS:
+	//// Replace this comment with your code.
+
+    // My thought process:
+    // The RAM (16K) ranges from 0 to 16383 --> meaning 2^14 different values.
+    // So the RAM only uses 14 bits.
+    // The value for the start of the Screen is 16384 - which is the 15 bits, where the MSB is 1 and rest 0.
+    // The Screen then ranges to 24575.
+    // The keyboard value is 24576 - which is the 15 bits where the 2 MSB are 1 and rest 0.
+    // Based on the information about the 2 MSB, I can deduce if we are working with the RAM, Screen or KBD.
+
+    // The below is my solution:
+    // check 15th bit (index 14) to see if we are in the RAM16K or after it:
+    // the output is then the load bit, meaning it will assign if we are going to load in to the ram or not the ram
+    // So fx sel=0 we assign a=in and b=0, if sel=1 we assign a=0 and b=in.
+    DMux(in=load, sel=address[14], a=ram, b=notRam);
+    // if not in the ram (meaning bit 15 is 1), we check for the screen or the kdb
+    // the same logic with sel then applies here
+    DMux(in=notRam, sel=address[13], a=screen, b=kbd);
+
+    // then we can use the outputs from the Dmux (which took the load as input, so decided if we are going to write into that specifici memory)
+    // and pass it in as the load parameter for the 3 memory parts with their respective address (and the input data value)
+    RAM16K(in=in, load=ram, address=address[0..13], out=ramOut);
+    Screen(in=in, load=screen, address=address[0..12], out=screenOut);
+    Keyboard(out=kbdOut);
+
+    // And then to read out based on the given address, we just give the outputs of the 3 memory parts, and decide from the 2 MSB bits what to read from
+    Mux4Way16(a=ramOut, b=ramOut, c=screenOut, d=kbdOut, sel=address[13..14], out=out);
+    //Mux16(a=ramOut, b=screenOut, sel=load, out=out);
+    
+}
