@@ -1,0 +1,101 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/5/CPU.hdl
+/**
+ * The Hack Central Processing unit (CPU).
+ * Parses the binary code in the instruction input and executes it according to the
+ * Hack machine language specification. In the case of a C-instruction, computes the
+ * function specified by the instruction. If the instruction specifies to read a memory
+ * value, the inM input is expected to contain this value. If the instruction specifies
+ * to write a value to the memory, sets the outM output to this value, sets the addressM
+ * output to the target address, and asserts the writeM output (when writeM = 0, any
+ * value may appear in outM).
+ * If the reset input is 0, computes the address of the next instruction and sets the
+ * pc output to that value. If the reset input is 1, sets pc to 0.
+ * Note: The outM and writeM outputs are combinational: they are affected by the
+ * instruction's execution during the current cycle. The addressM and pc outputs are
+ * clocked: although they are affected by the instruction's execution, they commit to
+ * their new values only in the next cycle.
+ */
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+	//// Replace this comment with your code.
+    
+    //  ------------  The below is my solution  ------------
+
+    // Symbolic representation of the c-instruction to help deduce the bits and understand the code
+    // 1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3
+
+    // This mux selects either the instruction input or selects output from the ALU
+    Mux16(a=instruction, b=outALU, sel=instruction[15], out=outMuxInA);
+
+    // negate the 15th bit of the instruction that decides if it is a a or c instruction
+    // 0 means a-instruction - meanining we load into the a-register
+    // and then we have to negate it, so it becomes 1 (true), and the load into the a-register happens
+    // we have to use that bit instead of saying "true" for the load parameter. 
+    // saying "true" would always write output of the mux to the a-register
+    // then we take "or" with 5th bit of potential c-instruction, since we can also assign A-register from c-instruct
+    Not(in=instruction[15], out=negateIn15);
+    Or(a=negateIn15, b=instruction[5], out=loadAReg);
+    ARegister(in=outMuxInA, load=loadAReg, out=outRegA, out[0..14]=addressM);
+
+    ALU(x=outRegD, y=outMuxInALU, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7] , no=instruction[6], out=outALU, out=outM, zr=ALUzero, ng=ALUneg);
+
+    // This mux feeds its output to the ALU
+    // The mux selects either the value inputted (inM) or the value from the A register
+    // the a (12th) mnemonic from the c-instruction determines if we are reading from M(emory) or the A-register
+    Mux16(a=outRegA, b=inM, sel=instruction[12], out=outMuxInALU);
+
+    // d-register
+    // The 4th bit of the c-instruction determines if we write (load) to D-register (d2)
+    // And then checking if it is a c-instruction
+    And(a=instruction[15], b=instruction[4], out=loadDReg);
+    DRegister(in=outALU, load=loadDReg, out=outRegD);
+
+    // program counter (if reset, else if load, else inc)
+    PC(in=outRegA, load=jump, inc=true, reset=reset, out=outPC, out[0..14]=pc);
+
+    // writeM (d3 sets if we write to M, and also need to check that it is a c-instruction)
+    And(a=instruction[3], b=instruction[15], out=writeM);
+
+    //  --- conditions to determine if we jump: we check for the jump conditions stated in the c-instruction, and then check if the stated condition is met based on the output from the ALU 
+    //  - if output positive (jump greater than) - using Nor gate
+    Or(a=ALUzero, b=ALUneg, out=zeroOrNeg);
+    Not(in=zeroOrNeg, out=positive);
+    And(a=positive, b=instruction[0], out=JGT);
+    //  - if output equal to 0 (jump equal to)
+    And(a=instruction[1], b=ALUzero, out=JEQ);
+    // if output greater or equal to 0
+    // And(a=JGT, b=JEQ, out=JGE);
+    // - if output negative (jump less than)
+    And(a=instruction[2], b=ALUneg, out=JLT);
+    // - if output not equal to zero (so either pos or neg)
+    // And(a=JLT, b=JGT, out=JNE);
+    // - if output less or equal to 0
+    // And(a=JLT, b=JEQ, out=JLE);
+    // - uncoditinal jump
+    // And(a=JLE, b=JGT, out=JMP);
+
+    // Since the 3 strict conditions (pos, neg or 0) are also implicit in the greater than and less than and the uncoditinonal jumps
+    // we dont have to explicitly check for them, so I commented that out
+    // we can just OR the above 3 cases and check if any of them is true
+    Or(a=JGT, b=JEQ, out=JGTorJEQ);
+    Or(a=JGTorJEQ, b=JLT, out=jumpConditions);
+    // make sure to also check that it is a c-instruction together with the jump conditions
+    And(a=instruction[15], b=jumpConditions, out=jump);
+
+
+}
