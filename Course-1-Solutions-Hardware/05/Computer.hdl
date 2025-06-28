@@ -1,0 +1,39 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/5/Computer.hdl
+/**
+ * The Hack computer, consisting of CPU, ROM and RAM.
+ * When reset = 0, the program stored in the ROM executes.
+ * When reset = 1, the program's execution restarts. 
+ * Thus, to start running the currently loaded program,
+ * set reset to 1, and then set it to 0. 
+ * From this point onwards, the user is at the mercy of the software.
+ * Depending on the program's code, and whether the code is correct,
+ * the screen may show some output, the user may be expected to enter
+ * some input using the keyboard, or the program may do some procerssing. 
+ */
+CHIP Computer {
+
+    IN reset;
+
+    PARTS:
+    //// Replace this comment with your code.
+
+    // below is my solution
+    // just simple wiring between inputs and outputs of the 3 big parts
+    
+    // the ROM takes in the PC which holds the value of the memeory address instruction
+    // and then outputs the instruction specified at that memory addres
+    ROM32K(address=pc, out=instruction);
+
+    // the cpu reads the instruction fromt he ROM, can reset based on input from user, reads a value from the data mememory, 
+    // outputs a value from the data memeory, outputs if we write to memory, the memory address to write to, and the next program counter value (so instruction address)
+    // the pc is then fed into ROM
+    CPU(inM=mValue, instruction=instruction, reset=reset, outM=outM, writeM=writeM, addressM=addressM, pc=pc);
+
+    // The memory read a value, reads an address and read a loader to decide if we write the value to the given address
+    // then outputs a value given an address
+    Memory(in=outM, load=writeM, address=addressM, out=mValue);
+
+}
