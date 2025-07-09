@@ -1,0 +1,29 @@
+C:\Users\Guray\Desktop\HackAssembler\bin\Debug\net8.0\HackAssembler.exe
+C:\Users\Guray\Desktop\HackAssembler\bin\Debug\net8.0\HackAssembler.deps.json
+C:\Users\Guray\Desktop\HackAssembler\bin\Debug\net8.0\HackAssembler.runtimeconfig.json
+C:\Users\Guray\Desktop\HackAssembler\bin\Debug\net8.0\HackAssembler.dll
+C:\Users\Guray\Desktop\HackAssembler\bin\Debug\net8.0\HackAssembler.pdb
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\HackAssembler.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\HackAssembler.AssemblyInfoInputs.cache
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\HackAssembler.AssemblyInfo.cs
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\HackAssembler.csproj.CoreCompileInputs.cache
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\HackAssembler.dll
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\refint\HackAssembler.dll
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\HackAssembler.pdb
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\HackAssembler.genruntimeconfig.cache
+C:\Users\Guray\Desktop\HackAssembler\obj\Debug\net8.0\ref\HackAssembler.dll
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\bin\Debug\net8.0\HackAssembler.exe
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\bin\Debug\net8.0\HackAssembler.deps.json
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\bin\Debug\net8.0\HackAssembler.runtimeconfig.json
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\bin\Debug\net8.0\HackAssembler.dll
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\bin\Debug\net8.0\HackAssembler.pdb
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.AssemblyInfoInputs.cache
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.AssemblyInfo.cs
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.csproj.CoreCompileInputs.cache
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.sourcelink.json
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.dll
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\refint\HackAssembler.dll
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.pdb
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\HackAssembler.genruntimeconfig.cache
+C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\HackAssembler\obj\Debug\net8.0\ref\HackAssembler.dll
