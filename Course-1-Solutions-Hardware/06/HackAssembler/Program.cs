@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HackAssembler;
+using System;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Text;
@@ -8,6 +9,7 @@ public class Assembler
     // public FileStream file;
     public string filePath = "";
     List<string> lines;
+    public Parser parser;
     public Assembler(string path)
     {
         // set filepath from command line argument
@@ -16,6 +18,8 @@ public class Assembler
         // read assembly file to list
         lines = StripWhiteSpace(filePath);
         Console.WriteLine(lines[0]);
+
+        parser = new Parser(lines.Count);
 
         // TODO: Later - construct symbol table with predefined 
     }
@@ -58,7 +62,11 @@ public class Assembler
     // read assemlby file line by line again, focusing on instructions and variables
     public void SecondPass()
     {
+        while (parser.HasMoreLines())
+        {
 
+        }
+        
     }
 
 
