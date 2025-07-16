@@ -55,7 +55,7 @@
                 string destValue = currentInstruction.Substring(0, indexOfEqualSign);
                 return destValue;
             }
-            else return string.Empty;
+            else return "null";
         }
 
         // Returns the instruction’s comp field
@@ -104,7 +104,7 @@
                 string jumpValue = currentInstruction.Substring(indexOfEqualSign + 1);
                 return jumpValue;
             }
-            else return string.Empty;
+            else return "null";
         }
     }
 
