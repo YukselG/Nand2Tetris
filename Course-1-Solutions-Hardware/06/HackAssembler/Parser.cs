@@ -46,6 +46,12 @@
             else return InstructionType.C_INSTRUCTION;
         }
 
+        // returns the a-instructions decimal value
+        public string aInstruction()
+        {
+            return currentInstruction.Substring(1);
+        }
+
         // Returns the instruction’s dest field
         public string dest()
         {

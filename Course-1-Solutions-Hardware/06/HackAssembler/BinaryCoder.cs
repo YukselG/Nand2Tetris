@@ -7,6 +7,19 @@
 
         }
 
+
+        // a-instruction
+        public string BinaryAInstruction(string decimalValue)
+        {
+            // parse the string decimal value to an int decimal value
+            int intVal = int.Parse(decimalValue);
+            // convert it to binary, then pad it with leading 0's so that the string contains 15 characters (which will represent the 15-bit value)
+            string binary15 = Convert.ToString(intVal, 2).PadLeft(15, '0');
+            // prefix with a "0", since this specifies that is an A-instruction - so in total it will be 16-bits
+            return "0" + binary15;
+        }
+
+        // c-instructions
         public string BinaryDest(string destField)
         {
             return CInstructionTables.DestTable[destField];
@@ -39,42 +52,44 @@
                 { "M", "001" },
                 { "D", "010" },
                 { "DM", "011" },
+                { "MD", "011" },
                 { "A", "100" },
                 { "AM", "101" },
                 { "AD", "110" },
                 { "ADM", "111" },
+                { "AMD", "111" },
             };
 
             CompTable = new Dictionary<string, string>
             {
-                { "0", "101010" },
-                { "1", "111111" },
-                { "-1", "111010" },
-                { "D", "001100" },
-                { "A", "110000" },
-                { "M", "110000" },
-                { "!D", "001101" },
-                { "!A", "110001" },
-                { "!M", "110001" },
-                { "-D", "001111" },
-                { "-A", "110011" },
-                { "-M", "110011" },
-                { "D+1", "011111" },
-                { "A+1", "110111" },
-                { "M+1", "110111" },
-                { "D-1", "001110" },
-                { "A-1", "110010" },
-                { "M-1", "110010" },
-                { "D+A", "000010" },
-                { "D+M", "000010" },
-                { "D-A", "010011" },
-                { "D-M", "010011" },
-                { "A-D", "000111" },
-                { "M-D", "000111" },
-                { "D&A", "000000" },
-                { "D&M", "000000" },
-                { "D|A", "010101" },
-                { "D|M", "010101" },
+                { "0", "0101010" },
+                { "1", "0111111" },
+                { "-1", "0111010" },
+                { "D", "0001100" },
+                { "A", "0110000" },
+                { "M", "1110000" },
+                { "!D", "0001101" },
+                { "!A", "0110001" },
+                { "!M", "1110001" },
+                { "-D", "0001111" },
+                { "-A", "0110011" },
+                { "-M", "1110011" },
+                { "D+1", "0011111" },
+                { "A+1", "0110111" },
+                { "M+1", "1110111" },
+                { "D-1", "0001110" },
+                { "A-1", "0110010" },
+                { "M-1", "1110010" },
+                { "D+A", "0000010" },
+                { "D+M", "1000010" },
+                { "D-A", "0010011" },
+                { "D-M", "1010011" },
+                { "A-D", "0000111" },
+                { "M-D", "1000111" },
+                { "D&A", "0000000" },
+                { "D&M", "1000000" },
+                { "D|A", "0010101" },
+                { "D|M", "1010101" },
             };
 
             JumpTable = new Dictionary<string, string>
