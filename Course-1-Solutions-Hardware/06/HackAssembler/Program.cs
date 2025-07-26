@@ -8,6 +8,7 @@ public class Assembler
     List<string> binaryLines;
     public Parser parser;
     public BinaryCoder binaryCoder;
+    public SymbolTable symbolTable;
 
     public Assembler(string path)
     {
@@ -21,11 +22,11 @@ public class Assembler
 
         binaryLines = new List<string>();
 
+        symbolTable = new SymbolTable();
+
         parser = new Parser(assemblyLines.Count);
 
         binaryCoder = new BinaryCoder();
-
-        // TODO: Later - construct symbol table with predefined 
     }
 
     public List<string> StripWhiteSpace(string filePath)
