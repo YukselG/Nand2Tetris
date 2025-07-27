@@ -112,13 +112,25 @@
             }
             else return "null";
         }
+
+        // Returns the instructions symbol (used only if instruction is @symbol or (symbol))
+        public string GetSymbol()
+        {
+            InstructionType instructionType = ParseInstructionType();
+
+            if (instructionType == InstructionType.L_INSTRUCTION)
+            {
+                return currentInstruction.Substring(1, currentInstruction.Length - 2);
+            }
+            else if (instructionType == InstructionType.A_INSTRUCTION)
+            {
+                return currentInstruction.Substring(1);
+            }
+            else return "";
+        }
     }
 
-    /*// TODO: Later
-    public string Symbol()
-    {
-        return "";
-    }*/
+
 }
 
 public enum InstructionType

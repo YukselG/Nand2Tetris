@@ -61,7 +61,25 @@ public class Assembler
     // read assemlby file line by line to get labels and labels to symbol table
     public void FirstPass()
     {
-        // TODO: Later - Add (label) declarations
+        int index = 0;
+
+        while (parser.HasMoreLines())
+        {
+            parser.Advance(assemblyLines, index);
+
+            // get instruction type
+            InstructionType instructionType = parser.ParseInstructionType();
+
+            if (instructionType == InstructionType.L_INSTRUCTION)
+            {
+                string labelSymbol = parser.GetSymbol();
+
+                // index + 1 - because the declaration of the label is not "a real instruction", but a go to, so we want to go to the next instruction line 
+                // Test the above stated logic !!
+                symbolTable.AddSymbol(labelSymbol, index + 1);
+            }
+            index++;
+        }
     }
 
     // read assemlby file line by line again, focusing on instructions and variables
