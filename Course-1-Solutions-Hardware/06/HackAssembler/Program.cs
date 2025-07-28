@@ -18,7 +18,6 @@ public class Assembler
 
         // read assembly file to list
         assemblyLines = StripWhiteSpace(filePath);
-        Console.WriteLine(assemblyLines[0]);
 
         binaryLines = new List<string>();
 
@@ -36,24 +35,43 @@ public class Assembler
 
         // list for no white space lines
         List<string> lines = new List<string>();
+        int index = -1;
 
         // iterate through all lines to check and skip white space (empty lines, comments etc.)
-        foreach (var line in allLines)
-        {          
+        foreach (var rawLine in allLines)
+        {
+            index++;
+            // Console.WriteLine("index = " + index);
             // ignore empty lines 
-            if (line.Length > 0)
+            if (rawLine.Length > 0)
             {
-                // ignore lines starting as comment
-                if (line[0] == '/')
+                // trim whitespace at the start and end of string (so fx indentation)
+                string line = rawLine.Trim();
+
+                // if line is a comment - ignore the line and continue to next line
+                if (line.StartsWith("//"))
                 {
+                    //Console.WriteLine("inside //");
+                    // Console.WriteLine(line[0]);
                     continue;
                 }
-                else
+
+                // check for inline comments
+                int inlineCommentIndex = line.IndexOf("//");
+                if (inlineCommentIndex >= 0)
                 {
+                    // get the substring up to inline comment and trim for whitespaces
+                    line = line.Substring(0, inlineCommentIndex).Trim();
+                }
+
+                // check if line is not empty (it could fx be empty if there was indented inline comment - taking substring and trimmed that woudl result in empty string)
+                if (!string.IsNullOrEmpty(line))
+                {
+                    //Console.WriteLine("inside not null");
+                    // console.WriteLine(line[0]);
                     lines.Add(line);
                 }
             }
-
         }
         return lines;
     }
@@ -62,6 +80,7 @@ public class Assembler
     public void FirstPass()
     {
         int index = 0;
+        int labelIndex = 0;
 
         while (parser.HasMoreLines())
         {
@@ -74,9 +93,8 @@ public class Assembler
             {
                 string labelSymbol = parser.GetSymbol();
 
-                // index + 1 - because the declaration of the label is not "a real instruction", but a go to, so we want to go to the next instruction line 
-                // Test the above stated logic !!
-                symbolTable.AddSymbol(labelSymbol, index + 1);
+                symbolTable.AddSymbol(labelSymbol, index - labelIndex);
+                labelIndex++;
             }
             index++;
         }
@@ -85,13 +103,23 @@ public class Assembler
     // read assemlby file line by line again, focusing on instructions and variables
     public void SecondPass()
     {
+        Console.WriteLine("inside second pass");
         string binaryValue = "";
         int index = 0;
+        int variableMemoryAddres = 16;
         while (parser.HasMoreLines())
         {
+            Console.WriteLine("inside second pass while");
             parser.Advance(assemblyLines, index);
 
             InstructionType instructionType = parser.ParseInstructionType();
+
+            // if the instruction is a label declaration we skip it since this has been taken care of in the first pass
+            if (instructionType == InstructionType.L_INSTRUCTION)
+            {
+                index++;
+                continue;
+            }
 
             if (instructionType == InstructionType.A_INSTRUCTION)
             {
@@ -100,10 +128,14 @@ public class Assembler
                 // if symbol doesnt exist, add it to the symbol table
                 if (!symbolTable.ContainsSymbol(symbol))
                 {
-                    symbolTable.AddSymbol(symbol, index);
+                    symbolTable.AddSymbol(symbol, variableMemoryAddres);
+                    variableMemoryAddres++;
                 }
 
                 int symbolAddress = symbolTable.GetAddress(symbol);
+
+                // TODO: Have to account for normal a-instructions without symbols as well
+                // TODO: Check if normal a-instruction or symbol 
 
                 // below is for symbolless
                 // string decimalValue = parser.aInstruction();

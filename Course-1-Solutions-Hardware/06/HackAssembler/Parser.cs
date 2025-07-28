@@ -3,17 +3,23 @@
     public class Parser
     {
         public int counter { get; set; }
+        public int counterSecond { get; set; }
+
         public string currentInstruction = "";
         public Parser(int counter)
         {
             this.counter = counter;
+            counterSecond = counter;
         }
 
         // Check if the assembly file has more lines to parse
         public bool HasMoreLines()
         {
+            Console.WriteLine("inside parser has more lines");
             if (counter == 0)
             {
+                Console.WriteLine("inside counter = 0");
+                counter = counterSecond;
                 return false;
             }
             else
@@ -28,6 +34,8 @@
         public string Advance(List<string> lines, int index)
         {
             currentInstruction = lines[index];
+            Console.WriteLine("current ins");
+            Console.WriteLine(currentInstruction);
             counter--;
 
             return currentInstruction;
