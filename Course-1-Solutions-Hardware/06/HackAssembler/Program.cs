@@ -39,7 +39,7 @@ public class Assembler
 
         // iterate through all lines to check and skip white space (empty lines, comments etc.)
         foreach (var line in allLines)
-        {
+        {          
             // ignore empty lines 
             if (line.Length > 0)
             {
@@ -95,9 +95,20 @@ public class Assembler
 
             if (instructionType == InstructionType.A_INSTRUCTION)
             {
-                string decimalValue = parser.aInstruction();
+                // get symbol from instruction (e.g. @i, @n etc.)
+                string symbol = parser.GetSymbol();
+                // if symbol doesnt exist, add it to the symbol table
+                if (!symbolTable.ContainsSymbol(symbol))
+                {
+                    symbolTable.AddSymbol(symbol, index);
+                }
 
-                binaryValue = binaryCoder.BinaryAInstruction(decimalValue);
+                int symbolAddress = symbolTable.GetAddress(symbol);
+
+                // below is for symbolless
+                // string decimalValue = parser.aInstruction();
+
+                binaryValue = binaryCoder.BinaryAInstruction(symbolAddress.ToString());
             }
             else if (instructionType == InstructionType.C_INSTRUCTION)
             {
@@ -146,6 +157,8 @@ public class Assembler
     static void Main(string[] args)
     {
         Assembler asm = new Assembler(args[0]);
+
+        asm.FirstPass();
 
         asm.SecondPass();
 
