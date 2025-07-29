@@ -15,10 +15,8 @@
         // Check if the assembly file has more lines to parse
         public bool HasMoreLines()
         {
-            Console.WriteLine("inside parser has more lines");
             if (counter == 0)
             {
-                Console.WriteLine("inside counter = 0");
                 counter = counterSecond;
                 return false;
             }
@@ -34,8 +32,6 @@
         public string Advance(List<string> lines, int index)
         {
             currentInstruction = lines[index];
-            Console.WriteLine("current ins");
-            Console.WriteLine(currentInstruction);
             counter--;
 
             return currentInstruction;
@@ -54,8 +50,19 @@
             else return InstructionType.C_INSTRUCTION;
         }
 
+        // check if a-instruction is symbolic or a constant value 
+        public bool A_InstructionIsSymbolic()
+        {
+            string a_instruction = currentInstruction.Substring(1);
+            if (char.IsDigit(a_instruction[0]))
+            {
+                return false;
+            }
+            else return true;
+        }
+
         // returns the a-instructions decimal value
-        public string aInstruction()
+        public string GetConstantA_Instruction()
         {
             return currentInstruction.Substring(1);
         }

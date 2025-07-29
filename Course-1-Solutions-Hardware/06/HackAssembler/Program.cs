@@ -35,13 +35,10 @@ public class Assembler
 
         // list for no white space lines
         List<string> lines = new List<string>();
-        int index = -1;
 
         // iterate through all lines to check and skip white space (empty lines, comments etc.)
         foreach (var rawLine in allLines)
         {
-            index++;
-            // Console.WriteLine("index = " + index);
             // ignore empty lines 
             if (rawLine.Length > 0)
             {
@@ -51,8 +48,6 @@ public class Assembler
                 // if line is a comment - ignore the line and continue to next line
                 if (line.StartsWith("//"))
                 {
-                    //Console.WriteLine("inside //");
-                    // Console.WriteLine(line[0]);
                     continue;
                 }
 
@@ -67,8 +62,6 @@ public class Assembler
                 // check if line is not empty (it could fx be empty if there was indented inline comment - taking substring and trimmed that woudl result in empty string)
                 if (!string.IsNullOrEmpty(line))
                 {
-                    //Console.WriteLine("inside not null");
-                    // console.WriteLine(line[0]);
                     lines.Add(line);
                 }
             }
@@ -103,13 +96,11 @@ public class Assembler
     // read assemlby file line by line again, focusing on instructions and variables
     public void SecondPass()
     {
-        Console.WriteLine("inside second pass");
         string binaryValue = "";
         int index = 0;
         int variableMemoryAddres = 16;
         while (parser.HasMoreLines())
         {
-            Console.WriteLine("inside second pass while");
             parser.Advance(assemblyLines, index);
 
             InstructionType instructionType = parser.ParseInstructionType();
@@ -123,24 +114,29 @@ public class Assembler
 
             if (instructionType == InstructionType.A_INSTRUCTION)
             {
-                // get symbol from instruction (e.g. @i, @n etc.)
-                string symbol = parser.GetSymbol();
-                // if symbol doesnt exist, add it to the symbol table
-                if (!symbolTable.ContainsSymbol(symbol))
+                string addressValue = "";
+                // check if symbolic a-instruction or decimal constant a-instruction
+                if (parser.A_InstructionIsSymbolic())
                 {
-                    symbolTable.AddSymbol(symbol, variableMemoryAddres);
-                    variableMemoryAddres++;
+                    // get symbol from instruction (e.g. @i, @n etc.)
+                    string symbol = parser.GetSymbol();
+
+                    // if symbol doesnt exist, add it to the symbol table
+                    if (!symbolTable.ContainsSymbol(symbol))
+                    {
+                        symbolTable.AddSymbol(symbol, variableMemoryAddres);
+                        variableMemoryAddres++;
+                    }
+                    int symbolAddress = symbolTable.GetAddress(symbol);
+                    addressValue = symbolAddress.ToString();
+                } 
+                else
+                {
+                    // if not symbolic get the constant a-instruction value
+                    addressValue = parser.GetConstantA_Instruction();
                 }
 
-                int symbolAddress = symbolTable.GetAddress(symbol);
-
-                // TODO: Have to account for normal a-instructions without symbols as well
-                // TODO: Check if normal a-instruction or symbol 
-
-                // below is for symbolless
-                // string decimalValue = parser.aInstruction();
-
-                binaryValue = binaryCoder.BinaryAInstruction(symbolAddress.ToString());
+                binaryValue = binaryCoder.BinaryAInstruction(addressValue);
             }
             else if (instructionType == InstructionType.C_INSTRUCTION)
             {
