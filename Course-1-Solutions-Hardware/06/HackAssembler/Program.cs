@@ -164,8 +164,10 @@ public class Assembler
 
     public void CreateAndAddToOutputFile()
     {
+        DotNetEnv.Env.Load();
+
         // dynamically name the output file using the input file name, with new file extension of ".hack" 
-        string outputDirectory = @"C:\Users\Guray\Desktop\coding\Fra Git\Nand2Tetris\Course-1-Solutions-Hardware\06\Output-Files";
+        string outputDirectory = Environment.GetEnvironmentVariable("OUTPUT_DIR");
 
         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
 
